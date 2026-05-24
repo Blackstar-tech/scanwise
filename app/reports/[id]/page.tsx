@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { Download, Upload } from "lucide-react";
 import { ExplainerSections } from "@/components/ExplainerSections";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supportedReportLabels } from "@/lib/constants";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -71,6 +72,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
           <MedicalDisclaimer compact />
         </div>
       </div>
+      <SiteFooter />
     </main>
   );
 }

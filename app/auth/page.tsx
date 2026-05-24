@@ -1,5 +1,6 @@
 import { AuthPanel } from "@/components/AuthPanel";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export default async function AuthPage({
@@ -30,6 +31,7 @@ export default async function AuthPage({
         </section>
         <AuthPanel nextPath={next ?? "/dashboard"} />
       </div>
+      <SiteFooter />
     </main>
   );
 }

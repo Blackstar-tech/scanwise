@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { UploadDropzone } from "@/components/UploadDropzone";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -22,6 +23,7 @@ export default async function UploadPage() {
           <MedicalDisclaimer compact />
         </div>
       </div>
+      <SiteFooter />
     </main>
   );
 }

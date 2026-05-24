@@ -3,6 +3,7 @@ import { ArrowRight, FileSearch, LockKeyhole, ScanLine, TrendingUp } from "lucid
 import type { ReactNode } from "react";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { SectionHeader } from "@/components/SectionHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export default function LandingPage() {
@@ -97,6 +98,8 @@ export default function LandingPage() {
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <MedicalDisclaimer />
       </section>
+
+      <SiteFooter />
     </main>
   );
 }

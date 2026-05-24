@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/DashboardShell";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isSupabaseServerConfigured } from "@/lib/env";
 import { buildTrendCards } from "@/lib/report-comparison";
@@ -30,6 +31,7 @@ export default async function DashboardPage() {
           <MedicalDisclaimer compact />
         </div>
       </div>
+      <SiteFooter />
     </main>
   );
 }
