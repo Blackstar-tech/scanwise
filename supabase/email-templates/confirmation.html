@@ -1,0 +1,41 @@
+<div style="margin:0;background:#f7fbff;padding:32px 16px;font-family:Inter,Arial,sans-serif;color:#152033;">
+  <div style="margin:0 auto;max-width:560px;overflow:hidden;border:1px solid #d9e2ef;border-radius:20px;background:#ffffff;box-shadow:0 18px 45px rgba(21,32,51,0.10);">
+    <div style="background:#155eef;padding:28px 28px 24px;color:#ffffff;">
+      <div style="display:inline-block;border-radius:14px;background:rgba(255,255,255,0.14);padding:9px 12px;font-size:14px;font-weight:700;">
+        ScanWise
+      </div>
+      <h1 style="margin:22px 0 0;font-size:28px;line-height:1.2;font-weight:700;">
+        Confirm your ScanWise email
+      </h1>
+      <p style="margin:12px 0 0;color:#eaf3ff;font-size:15px;line-height:1.6;">
+        Finish setting up secure access to your report dashboard.
+      </p>
+    </div>
+
+    <div style="padding:28px;">
+      <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#334155;">
+        Hi,
+      </p>
+      <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#334155;">
+        Confirm this email address to continue using ScanWise.
+      </p>
+
+      <a href="{{ .ConfirmationURL }}" style="display:inline-block;border-radius:14px;background:#155eef;color:#ffffff;font-size:15px;font-weight:700;line-height:1;text-decoration:none;padding:15px 20px;">
+        Confirm email
+      </a>
+
+      <p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#64748b;">
+        If the button does not work, copy and paste this link into your browser:
+      </p>
+      <p style="margin:8px 0 0;word-break:break-all;font-size:12px;line-height:1.6;color:#155eef;">
+        {{ .ConfirmationURL }}
+      </p>
+
+      <div style="margin-top:26px;border-top:1px solid #e2e8f0;padding-top:18px;">
+        <p style="margin:0;font-size:12px;line-height:1.6;color:#64748b;">
+          If you did not request this email, you can safely ignore it. ScanWise explains CT and ultrasound report language for education only and does not replace a licensed clinician.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

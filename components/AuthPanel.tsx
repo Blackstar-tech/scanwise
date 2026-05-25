@@ -1,21 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Mail, ShieldCheck } from "lucide-react";
 import { createSupabaseBrowserClient, isSupabaseBrowserConfigured } from "@/lib/supabase/client";
 
 const supabaseSetupMessage =
   "Supabase is not configured yet, so this local build will use demo login. Add Supabase keys to .env.local when you are ready for real email and Google auth.";
+const emailCooldownSeconds = 60;
+const rateLimitMessage =
+  "Too many login emails were requested. Please wait a few minutes before trying email again, or use Google sign-in.";
 
 export function AuthPanel({ nextPath = "/dashboard" }: { nextPath?: string }) {
   const isConfigured = isSupabaseBrowserConfigured();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(isConfigured ? null : supabaseSetupMessage);
   const [isLoading, setIsLoading] = useState(false);
+  const [emailCooldownEndsAt, setEmailCooldownEndsAt] = useState<number | null>(null);
+  const [now, setNow] = useState(Date.now());
+  const remainingCooldownSeconds = emailCooldownEndsAt
+    ? Math.max(0, Math.ceil((emailCooldownEndsAt - now) / 1000))
+    : 0;
+  const isEmailOnCooldown = remainingCooldownSeconds > 0;
+
+  useEffect(() => {
+    if (!emailCooldownEndsAt) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      const nextNow = Date.now();
+      setNow(nextNow);
+
+      if (nextNow >= emailCooldownEndsAt) {
+        setEmailCooldownEndsAt(null);
+      }
+    }, 1000);
+
+    return () => window.clearInterval(interval);
+  }, [emailCooldownEndsAt]);
 
   async function signInWithEmail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (isEmailOnCooldown) {
+      setMessage(`Please wait ${remainingCooldownSeconds} seconds before requesting another email link.`);
+      return;
+    }
 
     if (!isConfigured) {
       startDemoSession(email, nextPath);
@@ -35,9 +66,13 @@ export function AuthPanel({ nextPath = "/dashboard" }: { nextPath?: string }) {
       });
 
       if (error) {
-        setMessage(error.message);
+        setMessage(getAuthErrorMessage(error.message));
+        if (isRateLimitError(error.message)) {
+          setEmailCooldownEndsAt(Date.now() + emailCooldownSeconds * 1000);
+        }
       } else {
         setMessage("Check your email for a secure sign-in link.");
+        setEmailCooldownEndsAt(Date.now() + emailCooldownSeconds * 1000);
       }
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to start email login.");
@@ -91,11 +126,15 @@ export function AuthPanel({ nextPath = "/dashboard" }: { nextPath?: string }) {
         </label>
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isLoading || isEmailOnCooldown}
           className="focus-ring primary-action w-full px-4 py-3"
         >
           <Mail aria-hidden="true" size={18} />
-          {isLoading ? "Sending link" : "Email login link"}
+          {isLoading
+            ? "Sending link"
+            : isEmailOnCooldown
+              ? `Try email again in ${remainingCooldownSeconds}s`
+              : "Email login link"}
         </button>
       </form>
 
@@ -138,4 +177,16 @@ function startDemoSession(email: string, nextPath: string) {
   const safeEmail = email.trim() || "demo@scanwise.local";
   document.cookie = `scanwise_demo_email=${encodeURIComponent(safeEmail)}; path=/; max-age=604800; SameSite=Lax`;
   window.location.assign(nextPath);
+}
+
+function getAuthErrorMessage(message: string) {
+  if (isRateLimitError(message)) {
+    return rateLimitMessage;
+  }
+
+  return message;
+}
+
+function isRateLimitError(message: string) {
+  return message.toLowerCase().includes("rate limit");
 }

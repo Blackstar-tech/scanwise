@@ -3,6 +3,13 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { Database } from "@/types/database";
 
 export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname === "/" && request.nextUrl.searchParams.has("code")) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    callbackUrl.searchParams.set("next", "/dashboard");
+    return NextResponse.redirect(callbackUrl);
+  }
+
   let response = NextResponse.next({
     request
   });

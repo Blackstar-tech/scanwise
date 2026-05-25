@@ -35,6 +35,15 @@ export function SiteFooter() {
         </ul>
 
         <nav className="flex flex-wrap gap-3 text-sm font-semibold">
+          <Link className="focus-ring rounded-xl text-medical-blue hover:text-medical-blue-dark dark:text-sky-300 dark:hover:text-sky-200" href="/learn">
+            Learn
+          </Link>
+          <Link className="focus-ring rounded-xl text-medical-blue hover:text-medical-blue-dark dark:text-sky-300 dark:hover:text-sky-200" href="/anatomy">
+            Anatomy
+          </Link>
+          <Link className="focus-ring rounded-xl text-medical-blue hover:text-medical-blue-dark dark:text-sky-300 dark:hover:text-sky-200" href="/dictionary">
+            Dictionary
+          </Link>
           <Link className="focus-ring rounded-xl text-medical-blue hover:text-medical-blue-dark dark:text-sky-300 dark:hover:text-sky-200" href="/upload">
             Upload
           </Link>
