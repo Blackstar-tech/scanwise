@@ -8,8 +8,9 @@ import { createSupabaseBrowserClient, isSupabaseBrowserConfigured } from "@/lib/
 const supabaseSetupMessage =
   "Supabase is not configured yet, so this local build will use demo login. Add Supabase keys to .env.local when you are ready for real email and Google auth.";
 const emailCooldownSeconds = 60;
+const rateLimitCooldownSeconds = 10 * 60;
 const rateLimitMessage =
-  "Too many login emails were requested. Please wait a few minutes before trying email again, or use Google sign-in.";
+  "The email login limit has been reached. Please use Google sign-in for now, or wait before requesting another email link.";
 
 export function AuthPanel({ nextPath = "/dashboard" }: { nextPath?: string }) {
   const isConfigured = isSupabaseBrowserConfigured();
@@ -68,7 +69,7 @@ export function AuthPanel({ nextPath = "/dashboard" }: { nextPath?: string }) {
       if (error) {
         setMessage(getAuthErrorMessage(error.message));
         if (isRateLimitError(error.message)) {
-          setEmailCooldownEndsAt(Date.now() + emailCooldownSeconds * 1000);
+          setEmailCooldownEndsAt(Date.now() + rateLimitCooldownSeconds * 1000);
         }
       } else {
         setMessage("Check your email for a secure sign-in link.");
