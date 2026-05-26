@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Activity } from "lucide-react";
-import { appName } from "@/lib/constants";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const footerBullets = [
   "Private report storage",
@@ -15,10 +14,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_1.4fr_auto] lg:items-center">
         <div>
           <Link href="/" className="focus-ring inline-flex items-center gap-2 rounded-2xl font-semibold heading-text">
-            <span className="grid size-9 place-items-center rounded-2xl bg-medical-blue text-white">
-              <Activity aria-hidden="true" size={18} />
-            </span>
-            {appName}
+            <BrandLogo markSize="sm" />
           </Link>
           <p className="mt-3 max-w-sm text-sm leading-6 body-text">
             Helping patients read radiology reports with calmer, clearer language.

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Activity, BookOpenText, Boxes, LibraryBig, LogIn, Upload } from "lucide-react";
+import { BookOpenText, Boxes, LibraryBig, LogIn, Upload } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { appName } from "@/lib/constants";
 
 const contentLinks = [
   { href: "/learn", label: "Learn", icon: BookOpenText },
@@ -14,10 +14,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-line/80 bg-white/95 backdrop-blur-xl transition-colors duration-300 dark:border-white/10 dark:bg-[#07111f]">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="focus-ring flex items-center gap-2 rounded-2xl font-semibold text-ink transition-colors dark:text-white">
-          <span className="grid size-10 place-items-center rounded-2xl bg-medical-blue text-white shadow-[0_12px_26px_rgba(21,94,239,0.25)]">
-            <Activity aria-hidden="true" size={20} />
-          </span>
-          <span>{appName}</span>
+          <BrandLogo />
         </Link>
         <nav className="flex items-center gap-2 text-sm font-medium">
           <div className="hidden items-center gap-1 lg:flex">
