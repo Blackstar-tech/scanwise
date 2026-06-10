@@ -2,6 +2,12 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import type { Database } from "@/types/database";
 
+const SESSION_REFRESH_PATHS = ["/dashboard", "/upload", "/reports", "/api/reports"];
+
+function needsSessionRefresh(pathname: string) {
+  return SESSION_REFRESH_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+}
+
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/" && request.nextUrl.searchParams.has("code")) {
     const callbackUrl = request.nextUrl.clone();
@@ -13,6 +19,10 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request
   });
+
+  if (!needsSessionRefresh(request.nextUrl.pathname)) {
+    return response;
+  }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
