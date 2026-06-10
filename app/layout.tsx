@@ -23,12 +23,65 @@ try {
 } catch {}
 `;
 
+const extensionAttributeCleanupScript = `
+(function () {
+  var extensionAttributes = ["bis_skin_checked"];
+
+  function removeExtensionAttributes(node) {
+    if (!node || node.nodeType !== 1) {
+      return;
+    }
+
+    extensionAttributes.forEach(function (attribute) {
+      if (node.hasAttribute(attribute)) {
+        node.removeAttribute(attribute);
+      }
+    });
+
+    if (!node.querySelectorAll) {
+      return;
+    }
+
+    extensionAttributes.forEach(function (attribute) {
+      node.querySelectorAll("[" + attribute + "]").forEach(function (element) {
+        element.removeAttribute(attribute);
+      });
+    });
+  }
+
+  removeExtensionAttributes(document.documentElement);
+
+  try {
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === "attributes") {
+          removeExtensionAttributes(mutation.target);
+          return;
+        }
+
+        mutation.addedNodes.forEach(removeExtensionAttributes);
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: extensionAttributes,
+      childList: true,
+      subtree: true
+    });
+  } catch {}
+})();
+`;
+
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
+        </Script>
+        <Script id="extension-attribute-cleanup" strategy="beforeInteractive">
+          {extensionAttributeCleanupScript}
         </Script>
       </head>
       <body className={inter.className}>{children}</body>
